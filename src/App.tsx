@@ -6,6 +6,7 @@ import Product from "./components/Product/Product";
 import Cart from "./components/Cart/Cart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
+// fetch data from api endpoint
 const fetchProducts = async (): Promise<CartItemType[]> =>
   await (await fetch("https://fakestoreapi.com/products")).json();
 
@@ -19,10 +20,30 @@ const App: FC = () => {
 
   // add products to cart
   const handleAddToCart = (product: CartItemType) => {
-    console.log(product);
+    setProducts((prev) => {
+      // check if product already exists/added
+      const productInCart = prev.find((item) => item.id === product.id);
+      if (productInCart) {
+        return prev.map((item) =>
+          item.id === product.id ? { ...item, amount: item.amount + 1 } : item
+        );
+      }
+      // First time the item is added
+      return [...prev, { ...product, amount: 1 }];
+    });
   };
-
-  const removeFromCart = () => {};
+  
+  // remove a product
+  const removeFromCart = (id: number) => {
+    setProducts(prev => prev.reduce((acc, item) => {
+      if(item.id === id){
+        if(item.amount ===1) return acc;
+        return [...acc, {...item, amount: item.amount-1}]
+      } else {
+        return [...acc, item]
+      }
+    }, [] as CartItemType[]))
+  };
 
   const getCartTotal = (items: CartItemType[]) =>
     items.reduce((acc: number, item) => acc + item.amount, 0);
@@ -45,7 +66,7 @@ const App: FC = () => {
           removeFromCart={removeFromCart}
         />
       </Drawer>
-      <IconButton size="large" color="inherit" onClick={openDrawer}>
+      <IconButton className="p-2" size="large" color="inherit" onClick={openDrawer}>
         <Badge badgeContent={getCartTotal(products)} color="secondary">
           <ShoppingCartIcon />
         </Badge>
