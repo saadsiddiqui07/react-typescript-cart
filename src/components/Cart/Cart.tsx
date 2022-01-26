@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { CartItemType } from "../../types/CartItemType";
 import CartProduct from "../CartProduct/CartProduct";
-import {Button} from "@mui/material"
+import { Button } from "@mui/material";
 
 type CartPropTypes = {
   products: CartItemType[];
@@ -15,7 +15,7 @@ const Cart: FC<CartPropTypes> = ({
   removeFromCart,
 }) => {
   // calculate total amount of the cart
-  const getTotalAmount= (items: CartItemType[]) =>
+  const getTotalAmount = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
   return (
@@ -31,8 +31,8 @@ const Cart: FC<CartPropTypes> = ({
         />
       ))}
       <div className="flex px-4 items-center justify-between w-full">
-      <Button variant="contained" >Proceed to checkout</Button>
-      <h2>Total: ${getTotalAmount(products)}</h2>
+        <Button variant="contained">Proceed to checkout</Button>
+        <h2>Total: ${getTotalAmount(products)}</h2>
       </div>
     </div>
   );
