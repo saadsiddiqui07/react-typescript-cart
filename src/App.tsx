@@ -32,17 +32,19 @@ const App: FC = () => {
       return [...prev, { ...product, amount: 1 }];
     });
   };
-  
+
   // remove a product
   const removeFromCart = (id: number) => {
-    setProducts(prev => prev.reduce((acc, item) => {
-      if(item.id === id){
-        if(item.amount ===1) return acc;
-        return [...acc, {...item, amount: item.amount-1}]
-      } else {
-        return [...acc, item]
-      }
-    }, [] as CartItemType[]))
+    setProducts((prev) =>
+      prev.reduce((acc, item) => {
+        if (item.id === id) {
+          if (item.amount === 1) return acc;
+          return [...acc, { ...item, amount: item.amount - 1 }];
+        } else {
+          return [...acc, item];
+        }
+      }, [] as CartItemType[])
+    );
   };
 
   const getCartTotal = (items: CartItemType[]) =>
@@ -66,7 +68,12 @@ const App: FC = () => {
           removeFromCart={removeFromCart}
         />
       </Drawer>
-      <IconButton className="p-2" size="large" color="inherit" onClick={openDrawer}>
+      <IconButton
+        className="p-2"
+        size="large"
+        color="inherit"
+        onClick={openDrawer}
+      >
         <Badge badgeContent={getCartTotal(products)} color="secondary">
           <ShoppingCartIcon />
         </Badge>
